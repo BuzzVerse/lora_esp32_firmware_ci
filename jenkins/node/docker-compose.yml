@@ -1,0 +1,49 @@
+version: '3'
+
+# ----------------------------------------
+# Services
+# ----------------------------------------
+services:
+  # --------------------------------------
+  # ESP32 Build Service
+  # --------------------------------------
+  esp32_build:
+    build:
+      context: ../../build/docker/                        # Path to the directory containing the Dockerfile
+    container_name: esp32_build
+    stdin_open: true                                      # Enables stdin for interactive processes
+    tty: true                                             # Enables interactive terminal
+    user: jenkins
+    command: tail -f /dev/null                            # Keeps the container running
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock         # Mount Docker socket
+      - ../../build/scripts:/usr/local/scripts            # Mount the scripts directory
+      - ../../build/artifacts:/usr/local/artifacts        # Mount the artifacts directory
+      - ./build:/usr/local/build                          # Dynamic mount location for build project
+      - ./ssh:/home/jenkins/.ssh                          # Mount SSH directory
+    environment:
+      - ESP_IDF_PATH=/opt/esp/idf                         # Environment variable for ESP-IDF
+    working_dir: /workspace                               # Default working directory inside the container
+  # --------------------------------------
+  # Jenkins Node Service
+  # --------------------------------------
+  jenkins-node:
+    build:
+      context: .                              # Context for the build - the same directory as docker-compose.yml
+    container_name: jenkins-node
+    user: jenkins
+    command: tail -f /dev/null                            # Keeps the container running
+    stdin_open: true
+    tty: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock         # Mount Docker socket
+      - ../../build/scripts:/usr/local/scripts            # Mount the scripts directory
+      - ../../build/artifacts:/usr/local/artifacts        # Mount the artifacts directory
+      - ./build:/usr/local/build                          # Dynamic mount location for build project
+      - ./agent:/home/jenkins/agent                       # Mount the Jenkins agent directory
+      - ./ssh:/home/jenkins/.ssh                          # Mount SSH directory
+    environment:
+      - JENKINS_URL=http://192.168.22.7:8082              # Jenkins server URL
+      - JENKINS_SECRET=test_key                           # Jenkins agent secret
+      - JENKINS_AGENT_NAME=Test                           # Jenkins agent name
+    working_dir: /workspace                               # Default working directory inside the container
