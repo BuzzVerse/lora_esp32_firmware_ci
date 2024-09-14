@@ -1,0 +1,40 @@
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+CMakeLists.txt not found in project directory /usr/local/build
