@@ -1,22 +1,21 @@
-version: '3'
-
+# ----------------------------------------
+# Services
+# ----------------------------------------
 services:
-  esp32_build:
-    image: my-esp32-image:latest
-    container_name: esp32_builder
+  # --------------------------------------
+  # Jenkins Node Service
+  # --------------------------------------
+  jenkins-node:
     build:
-      context: .
-      dockerfile: ./docker/Dockerfile
+      context: .                                          # Context for the build - the same directory as docker-compose.yml
+      dockerfile: Dockerfile_jenkins_node
+    container_name: jenkins_node
+    stdin_open: true
+    tty: true
     volumes:
-      - ./scripts:/usr/local/scripts           # Mount the scripts directory into the container
-      - ./artifacts:/usr/local/artifacts       # Mount the temporary directory for build artifacts
-      - ./docker/scripts/tmp:/usr/local/build  # Mount location for build project
+      - ${PWD}/agent:/home/jenkins/agent                       # Mount the Jenkins agent directory
     environment:
-      - ESP_IDF_PATH=/opt/esp/idf     # Environment variable for ESP-IDF
-    working_dir: /workspace           # Default working directory inside the container
-    entrypoint: ["/bin/bash", "-c", "source /opt/esp/idf/export.sh && /usr/local/scripts/build.sh"]  # Set up ESP-IDF environment first
-    tty: true                         # Enable interactive terminal if needed
-
-networks:
-  default:
-    driver: bridge
+      - JENKINS_URL=http://192.168.22.7:8082              # Jenkins server URL
+      - JENKINS_SECRET=<jenkins_encryption_key>           # Jenkins agent secret
+      - JENKINS_AGENT_NAME=Test                           # Jenkins agent name
+    working_dir: /home/jenkins                               # Default working directory inside the container

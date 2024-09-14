@@ -1,0 +1,138 @@
+# ----------------------------------------
+# Bazowy obraz: Jenkins Inbound Agent
+# ----------------------------------------
+FROM jenkins/inbound-agent:latest
+
+# ----------------------------------------
+# Argument dla nieinteraktywnej instalacji apt
+# ----------------------------------------
+ARG DEBIAN_FRONTEND=noninteractive
+
+# ----------------------------------------
+# Przełącz na użytkownika root do instalacji
+# ----------------------------------------
+USER root
+
+# ----------------------------------------
+# Aktualizacja i instalacja podstawowych narzędzi
+# ----------------------------------------
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        apt-utils \
+        ca-certificates \
+        curl \
+        wget \
+        unzip \
+        xz-utils \
+        zip \
+        gnupg \
+        openssh-client \
+        lsb-release \
+        bash
+
+# ----------------------------------------
+# Konfiguracja repozytorium Docker
+# ----------------------------------------
+RUN install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | \
+    gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+    https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+
+# ----------------------------------------
+# Aktualizacja i instalacja Build Tools i zależności
+# ----------------------------------------
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        git \
+        git-lfs \
+        cmake \
+        ninja-build \
+        ccache \
+        dfu-util \
+        device-tree-compiler \
+        bison \
+        flex \
+        gcc \
+        g++ \
+        gperf \
+        libffi-dev \
+        libssl-dev \
+        libusb-1.0-0 \
+        libusb-1.0-0-dev \
+        python3 \
+        python3-pip \
+        python3-setuptools \
+        python3-venv \
+        python3-wheel \
+        python3-cffi \
+        pkg-config \
+        docker-ce-cli
+
+# ----------------------------------------
+# Ustawienie alternatywy dla Python
+# ----------------------------------------
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10 && \
+    python -m pip install --upgrade pip --break-system-packages
+
+# ----------------------------------------
+# Ustaw zmienne środowiskowe dla ESP-IDF
+# ----------------------------------------
+ENV IDF_PATH=/opt/esp/idf
+ENV IDF_TOOLS_PATH=/opt/esp
+
+# ----------------------------------------
+# Klonowanie repozytorium ESP-IDF
+# ----------------------------------------
+RUN git clone --recursive https://github.com/espressif/esp-idf.git $IDF_PATH
+
+# ----------------------------------------
+# Instalacja wymaganych narzędzi ESP-IDF
+# ----------------------------------------
+RUN $IDF_PATH/install.sh all
+
+# ----------------------------------------
+# Ustawienie uprawnień i dostępu dla użytkownika 'jenkins'
+# ----------------------------------------
+
+## Dodaj użytkownika 'jenkins' do grupy 'docker'
+RUN groupadd -g 999 docker || true && \
+    usermod -aG docker jenkins
+
+## Ustawienie uprawnień dla katalogów ESP-IDF
+RUN chown -R jenkins:jenkins $IDF_TOOLS_PATH && \
+    chmod -R 755 $IDF_TOOLS_PATH
+
+## Ustawienie uprawnień wykonywania dla skryptów
+RUN chmod +x $IDF_PATH/export.sh
+
+## Ustawienie uprawnień dla katalogów '/opt' i '/opt/esp'
+RUN chmod 755 /opt /opt/esp /opt/esp/idf
+
+## Ustawianie zdalnego systemu plików dla Jenkins node
+RUN mkdir -p /var/jenkins && \
+    chown -R jenkins:jenkins /var/jenkins && \
+    chmod -R 775 /var/jenkins
+
+# ----------------------------------------
+# Ustawienie zmiennych środowiskowych
+# ----------------------------------------
+ENV ESP_CI_PROJECT_DIR=/home/jenkins
+ENV IDF_CCACHE_ENABLE=1
+
+# ----------------------------------------
+# Przełącz na użytkownika Jenkins
+# ----------------------------------------
+USER jenkins
+
+# ----------------------------------------
+# Ustaw katalog roboczy
+# ----------------------------------------
+WORKDIR /home/jenkins
+
+# ----------------------------------------
+# Źródło środowiska ESP-IDF podczas logowania
+# ----------------------------------------
+RUN echo "source $IDF_PATH/export.sh" >> $HOME/.bashrc
