@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  esp32_build:
+    build:
+      context: ./docker/Dockerfile  # Ścieżka do katalogu zawierającego Dockerfile
+    container_name: esp32_build
+    stdin_open: true                         # Enable stdin for interactive processes
+    tty: true                                # Enable interactive terminal
+    user: root
+    ports:
+      - "2233:22"                            # Przekierowanie portu 22 w kontenerze na 2233 na hoście
+    volumes:
+      - ./docker/scripts:/usr/local/scripts  # Mount the scripts directory into the container
+      - ./artifacts:/usr/local/artifacts     # Mount the temporary directory for build artifacts
+      - "${ESP_PROJECT_DIR}:/usr/local/build"  # Dynamic mount location for build project
+    environment:
+      - ESP_IDF_PATH=/opt/esp/idf            # Environment variable for ESP-IDF
+    working_dir: /workspace                  # Default working directory inside the container
+    entrypoint: ["/bin/bash", "-c", "source /opt/esp/idf/export.sh && /bin/bash -T"]
+
+networks:
+  default:
+    driver: bridge

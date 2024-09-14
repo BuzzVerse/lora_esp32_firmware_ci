@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  esp32_build:
+    build:
+      context: ../../build/docker/  # Ścieżka do katalogu zawierającego Dockerfile
+    container_name: esp32_build
+    stdin_open: true                         # Enable stdin for interactive processes
+    tty: true                                # Enable interactive terminal
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../../build/scripts:/usr/local/scripts  # Mount the scripts directory into the container
+      - ../../build/artifacts:/usr/local/artifacts  # Mount the temporary directory for build artifacts
+      - ./build:/usr/local/build             # Dynamic mount location for build project
+      - ./ssh:/root/.ssh                     # Montowanie katalogu SSH (taki sam jak dla jenkins-node)
+    environment:
+      - ESP_IDF_PATH=/opt/esp/idf            # Environment variable for ESP-IDF
+    working_dir: /workspace                  # Default working directory inside the container
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        chown -R jenkins:jenkins /home/jenkins/.ssh /home/jenkins/agent
+        [ -f /home/jenkins/.ssh/id_rsa ] && chmod 600 /home/jenkins/.ssh/id_rsa
+        [ -f /home/jenkins/.ssh/id_rsa.pub ] && chmod 644 /home/jenkins/.ssh/id_rsa.pub
+        [ -f /home/jenkins/.ssh/config ] && chmod 644 /home/jenkins/.ssh/config
+    networks:
+      - jenkins
+
+  jenkins-node:
+    image: jenkins-agent-docker:latest
+    container_name: jenkins-node
+    user: root
+    stdin_open: true
+    tty: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./agent:/home/jenkins/agent
+      - ./ssh:/home/jenkins/.ssh
+    environment:
+      - JENKINS_URL=http://192.168.22.7:8082   # Upewnij się, że to jest poprawny URL Jenkins
+      - JENKINS_SECRET=<jenkins_encryption_key>
+      - JENKINS_AGENT_NAME=Test
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        groupadd -f docker
+        usermod -aG docker jenkins
+        chown -R jenkins:jenkins /home/jenkins/.ssh /home/jenkins/agent
+        [ -f /home/jenkins/.ssh/id_rsa ] && chmod 600 /home/jenkins/.ssh/id_rsa
+        [ -f /home/jenkins/.ssh/id_rsa.pub ] && chmod 644 /home/jenkins/.ssh/id_rsa.pub
+        [ -f /home/jenkins/.ssh/config ] && chmod 644 /home/jenkins/.ssh/config
+        su jenkins -c '/usr/local/bin/jenkins-agent -url $${JENKINS_URL} -workDir /home/jenkins/agent -secret $${JENKINS_SECRET} -name $${JENKINS_AGENT_NAME}'
+    networks:
+      - jenkins
