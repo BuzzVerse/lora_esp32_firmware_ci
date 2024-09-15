@@ -28,7 +28,7 @@ CONTAINER_NAME="esp32_builder"
 ARTIFACTS_DIR="$PROJECT_DIR/artifacts"
 BUILD_LOGS="$PROJECT_DIR/build_logs.txt"
 
-# 1. Run the fetch_code.sh script with the same arguments
+# Run the fetch_code.sh script with the same arguments
 echo "Running fetch_code.sh to pull the desired version of the repository..."
 bash "$FETCH_SCRIPT" "$@"
 if [ $? -ne 0 ]; then
@@ -37,14 +37,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# 2. Check if the docker-compose file exists
+# Check if the docker-compose file exists
 if [ ! -f "$DOCKER_COMPOSE_FILE" ]; then
   echo "Error: Docker Compose file ($DOCKER_COMPOSE_FILE) not found."
   cd "$CURRENT_DIR"
   exit 1
 fi
 
-# 3. Prepare the ARTIFACTS_DIR
+# Prepare the ARTIFACTS_DIR
 if [ -d "$ARTIFACTS_DIR" ]; then
   echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR"
   rm -rf "$ARTIFACTS_DIR/*"
@@ -53,16 +53,11 @@ else
   mkdir -p "$ARTIFACTS_DIR"
 fi
 
-# 4. Start the Docker container and build the project
+# Start the Docker container and build the project
 echo "Starting Docker container and building the project..."
 docker-compose -f "$DOCKER_COMPOSE_FILE" up --build  # Use the correct docker-compose.yml file
 
-# 5. Build the project inside the container
-echo "Building project inside container..."
-docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /tmp && idf.py build"
-BUILD_STATUS=$?
-
-# 6. Fetch build logs from the container (optional, if you need logs saved)
+# Fetch build logs from the container (optional, if you need logs saved)
 echo "Fetching build logs..."
 docker logs "$CONTAINER_NAME" | tee "$BUILD_LOGS"
 
@@ -78,11 +73,11 @@ else
   echo "Build failed. Check build logs in $BUILD_LOGS."
 fi
 
-# 8. Stop and remove the Docker container
+# Stop and remove the Docker container
 echo "Stopping and removing the Docker container..."
 docker-compose -f "$DOCKER_COMPOSE_FILE" down
 
-# 9. Notify about the result
+# Notify about the result
 if [ $BUILD_STATUS -eq 0 ]; then
   echo "Build process completed successfully."
 else
