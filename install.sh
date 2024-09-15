@@ -38,7 +38,7 @@ if [ ! -f "$BUILD_SCRIPT_PATH" ]; then
 fi
 
 # Set execute permissions on all scripts in the docker/scripts directory
-SCRIPTS_DIR="$PROJECT_DIR/docker/scripts"
+SCRIPTS_DIR="$PROJECT_DIR/scripts"
 echo "Setting execute permissions on all scripts in $SCRIPTS_DIR..."
 chmod +x "$SCRIPTS_DIR"/*.sh
 
