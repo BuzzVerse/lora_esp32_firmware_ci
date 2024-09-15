@@ -8,13 +8,13 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     volumes:
-      - ./docker/scripts:/usr/local/scripts           # Mount the scripts directory into the container
+      - ./scripts:/usr/local/scripts           # Mount the scripts directory into the container
       - ./artifacts:/usr/local/artifacts       # Mount the temporary directory for build artifacts
       - ./docker/scripts/tmp:/usr/local/build  # Mount location for build project
     environment:
       - ESP_IDF_PATH=/opt/esp/idf     # Environment variable for ESP-IDF
     working_dir: /workspace           # Default working directory inside the container
-    entrypoint: ["/bin/bash", "-c", "source /opt/esp/idf/export.sh && /usr/local/scripts/build.sh"]  # Set up ESP-IDF environment first
+    entrypoint: ["/bin/bash", "-c", "source /opt/esp/idf/export.sh"]  # Set up ESP-IDF environment first
     tty: true                         # Enable interactive terminal if needed
 
 networks:

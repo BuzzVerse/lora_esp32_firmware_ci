@@ -36,6 +36,3 @@ Go to the project directory and run:
 
   idf.py build
 
-Building ESP project
-Executing action: all (aliases: build)
-CMakeLists.txt not found in project directory /usr/local/build
