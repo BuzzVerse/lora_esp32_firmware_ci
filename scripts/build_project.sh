@@ -120,9 +120,14 @@ docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d
 # Wait a few seconds to ensure the container is running
 sleep 5
 
-# Run the build.sh script inside the container
-echo "Running build.sh script inside the container..."
-docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh"
+# Check if the project is being built from a local path or from the system environment
+if [ -n "$ESP_PROJECT_DIR" ]; then
+  echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR"
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py menuconfig"
+else
+  echo "Running build.sh script inside the container..."
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh"
+fi
 
 BUILD_STATUS=$?
 
