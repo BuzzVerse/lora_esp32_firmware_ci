@@ -22,7 +22,7 @@ echo "Changing to project directory: $PROJECT_DIR"
 cd "$PROJECT_DIR"
 
 # Define paths relative to PROJECT_DIR
-FETCH_SCRIPT="$PROJECT_DIR/docker/scripts/fetch.sh"
+FETCH_SCRIPT="$PROJECT_DIR/scripts/fetch.sh"
 DOCKER_COMPOSE_FILE="$PROJECT_DIR/docker-compose.yml"
 CONTAINER_NAME="esp32_builder"
 ARTIFACTS_DIR="$PROJECT_DIR/artifacts"
@@ -44,10 +44,16 @@ if [ ! -f "$DOCKER_COMPOSE_FILE" ]; then
   exit 1
 fi
 
+# Ensure ownership of the tmp directory is set to the current user
+if [ -d "$ARTIFACTS_DIR" ]; then
+  echo "Setting ownership of $ARTIFACTS_DIR to the host user..."
+  sudo chown -R $(id -u):$(id -g) "$ARTIFACTS_DIR"
+fi
+
 # Prepare the ARTIFACTS_DIR
 if [ -d "$ARTIFACTS_DIR" ]; then
   echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR"
-  rm -rf "$ARTIFACTS_DIR/*"
+  rm -rf "$ARTIFACTS_DIR/"{*,.[!.]*,..?*} 2>/dev/null
 else
   echo "Creating artifacts directory: $ARTIFACTS_DIR"
   mkdir -p "$ARTIFACTS_DIR"
@@ -64,7 +70,7 @@ docker logs "$CONTAINER_NAME" | tee "$BUILD_LOGS"
 if [ $BUILD_STATUS -eq 0 ]; then
   echo "Build succeeded!"
 
-  # 7. Copy build artifacts from the container to the ARTIFACTS_DIR
+  # Copy build artifacts from the container to the ARTIFACTS_DIR
   echo "Copying build artifacts from container to $ARTIFACTS_DIR..."
   docker cp "$CONTAINER_NAME:/tmp/project/build" "$ARTIFACTS_DIR"
 

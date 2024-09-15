@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     volumes:
-      - ./scripts:/usr/local/scripts           # Mount the scripts directory into the container
+      - ./docker/scripts:/usr/local/scripts           # Mount the scripts directory into the container
       - ./artifacts:/usr/local/artifacts       # Mount the temporary directory for build artifacts
       - ./docker/scripts/tmp:/usr/local/build  # Mount location for build project
     environment:
