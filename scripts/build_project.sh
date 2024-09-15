@@ -85,84 +85,68 @@ BUILD_LOGS="$PROJECT_DIR/build_logs.txt"
 
 # Run the fetch_code.sh script with the same arguments
 echo "Running fetch_code.sh to pull the desired version of the repository..."
-bash "$FETCH_SCRIPT" "$@"
+bash "$FETCH_SCRIPT" "$@" 2>&1 | tee -a "$BUILD_LOGS"
 if [ $? -ne 0 ]; then
-  echo "Error: Failed to fetch code."
+  echo "Error: Failed to fetch code." | tee -a "$BUILD_LOGS"
   cd "$CURRENT_DIR"
   exit 1
 fi
 
 # Check if the docker-compose file exists
 if [ ! -f "$DOCKER_COMPOSE_FILE" ]; then
-  echo "Error: Docker Compose file ($DOCKER_COMPOSE_FILE) not found."
+  echo "Error: Docker Compose file ($DOCKER_COMPOSE_FILE) not found." | tee -a "$BUILD_LOGS"
   cd "$CURRENT_DIR"
   exit 1
 fi
 
 # Ensure ownership of the tmp directory is set to the current user
 if [ -d "$ARTIFACTS_DIR" ]; then
-  echo "Setting ownership of $ARTIFACTS_DIR to the host user..."
+  echo "Setting ownership of $ARTIFACTS_DIR to the host user..." | tee -a "$BUILD_LOGS"
   sudo chown -R $(id -u):$(id -g) "$ARTIFACTS_DIR"
 fi
 
 # Prepare the ARTIFACTS_DIR
 if [ -d "$ARTIFACTS_DIR" ]; then
-  echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR"
+  echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
   rm -rf "$ARTIFACTS_DIR/"{*,.[!.]*,..?*} 2>/dev/null
 else
-  echo "Creating artifacts directory: $ARTIFACTS_DIR"
+  echo "Creating artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
   mkdir -p "$ARTIFACTS_DIR"
 fi
 
 # Start the Docker container
-echo "Starting Docker container..."
-docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d
+echo "Starting Docker container..." | tee -a "$BUILD_LOGS"
+docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d 2>&1 | tee -a "$BUILD_LOGS"
 
 # Wait a few seconds to ensure the container is running
-sleep 15
+sleep 10
 
 if [ -n "$ESP_PROJECT_DIR" ]; then
-  echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR"
-  docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py menuconfig 2>&1 | tee /dev/tty"
+  echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR" | tee -a "$BUILD_LOGS"
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py menuconfig" 2>&1 | tee -a "$BUILD_LOGS"
 else
-  echo "Running build.sh script inside the container..."
-  docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh 2>&1 | tee /dev/tty"
+  echo "Running build.sh script inside the container..." | tee -a "$BUILD_LOGS"
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh" 2>&1 | tee -a "$BUILD_LOGS"
 fi
 
 BUILD_STATUS=$?
 
-# Fetch build logs from the container (optional, if you need logs saved)
-echo "Fetching build logs..."
-docker logs "$CONTAINER_NAME" | tee "$BUILD_LOGS"
-
-if [ $BUILD_STATUS -eq 0 ]; then
-  echo "Build succeeded!"
+# Fetch build logs from the container
+if [ $BUILD_STATUS -ne 0 ]; then
+  echo "Build failed. Fetching container logs..." | tee -a "$BUILD_LOGS"
+  docker logs "$CONTAINER_NAME" | tee -a "$BUILD_LOGS"
+else
+  echo "Build succeeded!" | tee -a "$BUILD_LOGS"
 
   # Copy build artifacts from the container to the ARTIFACTS_DIR
-  echo "Copying build artifacts from container to $ARTIFACTS_DIR..."
+  echo "Copying build artifacts from container to $ARTIFACTS_DIR..." | tee -a "$BUILD_LOGS"
   docker cp "$CONTAINER_NAME:/usr/local/build" "$ARTIFACTS_DIR"
-
-  echo "Artifacts copied to $ARTIFACTS_DIR."
-else
-  echo "Build failed. Check build logs in $BUILD_LOGS."
 fi
 
 # Stop and remove the Docker container
-echo "Stopping and removing the Docker container..."
-docker-compose -f "$DOCKER_COMPOSE_FILE" down
-
-# Notify about the result
-if [ $BUILD_STATUS -eq 0 ]; then
-  echo "Build process completed successfully."
-else
-  echo "Build process failed."
-  cd "$CURRENT_DIR"
-  exit 1
-fi
+echo "Stopping and removing the Docker container..." | tee -a "$BUILD_LOGS"
+docker-compose -f "$DOCKER_COMPOSE_FILE" down 2>&1 | tee -a "$BUILD_LOGS"
 
 # Return to the original directory
-echo "Returning to the original directory: $CURRENT_DIR"
+echo "Returning to the original directory: $CURRENT_DIR" | tee -a "$BUILD_LOGS"
 cd "$CURRENT_DIR"
-
-# Confirm we are back in the original directory
-echo "Now in original directory: $(pwd)"

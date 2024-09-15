@@ -4,11 +4,10 @@
 source /opt/esp/idf/export.sh
 
 # Build the project with verbose logging
-echo "Building ESP project with verbose logging"
 cd /usr/local/build
 
 # Execute the build command
-idf.py -v build
+idf.py build
 
 # Check if the build was successful
 if [ $? -ne 0 ]; then
