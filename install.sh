@@ -76,8 +76,43 @@ else
   echo "export PROJECT_DIR=\"$PROJECT_DIR\"" >> "$BASHRC"
 fi
 
-# Reload ~/.bashrc for the current user session
-sudo -u $SUDO_USER bash -c "source $BASHRC"
+# Prompt the user to configure a local ESP32 project environment
+echo "Would you like to configure a local ESP32 project? (yes/no)"
+read -r configure_esp
+
+if [[ "$configure_esp" == "yes" ]]; then
+  echo "Please provide the path to your ESP32 project directory:"
+  read -r ESP_PROJECT_PATH
+
+  # Check if the provided path exists
+  if [ ! -d "$ESP_PROJECT_PATH" ]; then
+    echo "Error: The provided path does not exist."
+    exit 1
+  fi
+
+  # Check if the file 'main/CMakeLists.txt' exists and contains 'idf_component_register'
+  CMAKE_FILE="$ESP_PROJECT_PATH/main/CMakeLists.txt"
+  if [ -f "$CMAKE_FILE" ] && grep -q "idf_component_register" "$CMAKE_FILE"; then
+    echo "ESP32 project verified. Setting up environment variable for ESP_PROJECT_DIR."
+
+    # Add the ESP32 project path to ~/.bashrc if it doesn't already exist
+    if grep -q "^export ESP_PROJECT_DIR=" "$BASHRC"; then
+      echo "Updating ESP_PROJECT_DIR in $BASHRC"
+      sed -i "s|^export ESP_PROJECT_DIR=.*|export ESP_PROJECT_DIR=\"$ESP_PROJECT_PATH\"|g" "$BASHRC"
+    else
+      echo "Adding ESP_PROJECT_DIR to $BASHRC"
+      echo "export ESP_PROJECT_DIR=\"$ESP_PROJECT_PATH\"" >> "$BASHRC"
+    fi
+
+    # Reload ~/.bashrc for the current user session
+    sudo -u $SUDO_USER bash -c "source $BASHRC"
+
+    echo "ESP32 project path set successfully."
+  else
+    echo "Error: This does not appear to be a valid ESP32 project. Missing 'idf_component_register' in CMakeLists.txt."
+    exit 1
+  fi
+fi
 
 echo "Installation completed. PROJECT_DIR is set to $PROJECT_DIR."
 echo "Please run 'source ~/.bashrc' or restart the terminal for changes to take effect."
