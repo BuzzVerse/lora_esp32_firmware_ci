@@ -128,6 +128,53 @@ build_project -t 0.0.1 # Build from a specific tag
 
 build_project -c 1234567 # Build from a specific commit  
 ```
+
+### Local ESP32 Project Build Guide
+
+This section explains how the `build_project.sh` script handles building a local ESP32 project, and how to set up and configure the environment to ensure successful builds.
+
+#### How Local Project Building Works
+
+1.  **Default Project Setup**:
+    
+    -   If the script is run **without any parameters**, it will attempt to build the default ESP32 project that was configured during the installation process.
+        
+    -   The default project is defined by the environment variable `ESP_PROJECT_DIR`, which should have been set during installation via the `install.sh` script.
+        
+2.  **Custom Project Path**:
+    
+    -   The script also supports building **custom projects** by specifying the path to the project using the `-p` flag.
+        
+3.  **Validation of ESP32 Project**:
+    
+    -   For both default and custom projects, the script validates the project by checking if the file `main/CMakeLists.txt` contains the string `idf_component_register`. This ensures that the specified directory is a valid ESP32 project.
+        
+    -   If validation fails, the script exits with an error and prompts the user to check their project configuration.
+        
+
+#### Instructions for Building a Local ESP32 Project
+
+To build an ESP32 project locally, follow these steps:
+
+##### 1\. **Default Project Build**
+
+If you configured the default ESP32 project during installation, you can simply run the `build_project.sh` script without any parameters:
+
+```
+build_project.sh  
+```  
+
+If the `ESP_PROJECT_DIR` variable is set and points to a valid ESP32 project, the script will proceed with building that project.
+
+##### 2\. **Custom Project Build**
+
+If you want to build a specific ESP32 project located in a different directory, use the `-p` option to specify the path to that project:
+
+```
+build_project.sh -p /path/to/your/esp_project  
+```
+The script will validate the project by checking for the presence of `idf_component_register` in `main/CMakeLists.txt`. If the project is valid, it will proceed with the build.
+
 ### 3\. Fetching the Code
 
 The `fetch.sh` script is responsible for fetching the code from the repository based on the provided branch, tag, or commit hash. This script is automatically invoked by `build.sh`.
