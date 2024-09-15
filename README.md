@@ -7,22 +7,26 @@ This project provides a Docker-based automated build system for ESP32 firmware u
 ## Structure
 ```bash
 .
-├── artifacts # Directory for storing build artifacts
-├── docker # Docker-related files
-│ ├── Dockerfile # Dockerfile for building the ESP32 environment
-│ ├── jenkins-agent.jar # Optional file for Jenkins agent setup
-│ ├── scripts # Scripts used by the Docker container
-│ │ ├── artifacts # Directory for storing build artifacts inside the container
-│ │ ├── build_project.sh # Main script for building the project
-│ │ ├── fetch.sh # Script to fetch code from GitHub
-│ │ └── jenkins-build.sh # Script used by Jenkins for building
-│ └── start-jenkins-node.sh # Script to start Jenkins node in Docker
-├── docker-compose.yml # Docker Compose file for managing services
-├── install.sh # Installation script
-├── Jenkinsfile # Jenkins pipeline configuration
-├── README.md # Project documentation
-└── scripts # Host-side scripts
-  └── build.sh # Main build script for running builds on the host  
+.
+├── artifacts                     # Stores build artifacts and output files generated during the build process
+├── build_logs.txt                # Log file containing messages and output from the build process, useful for debugging
+├── docker                        # Contains Docker-related files and configurations
+│   ├── Dockerfile                # Defines the Docker image for the project, specifying the environment and dependencies
+│   ├── jenkins-agent.jar         # Jenkins agent used for CI/CD integration with the project
+│   ├── scripts                   # Scripts executed inside the Docker container
+│   │   └── tmp                   # Temporary directory used for intermediate files and operations within Docker
+│   └── start-jenkins-node.sh     # Script to start the Jenkins node inside the Docker container
+├── docker-compose.yml            # Defines and manages services and containers with Docker Compose
+├── install.sh                    # Installation script for setting up the project environment, creating symbolic links, and setting permissions
+├── Jenkinsfile                   # Jenkins pipeline configuration to automate build, test, and deployment processes
+├── README.md                     # Documentation file explaining how to install, use, and contribute to the project
+├── scripts                       # Contains scripts for managing and building the project
+│   ├── build_project.sh          # Main script for triggering the build process based on branch, tag, or commit
+│   ├── build.sh                  # Script to handle the actual build steps
+│   ├── fetch.sh                  # Script to fetch specific versions of the project from Git based on parameters
+│   └── jenkins-build.sh          # Script to trigger Jenkins-specific builds and integrations
+└── tmp                           # Temporary directory used during the build and fetch operations, ignored in version control
+
 ```  
   
   
