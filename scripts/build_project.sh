@@ -12,6 +12,7 @@ fi
 # Initialize variables
 ESP_PROJECT_DIR=""
 DEFAULT_ESP_PROJECT=${ESP_PROJECT_DIR:-$PROJECT_DIR/esp_project}
+CONTAINER_NAME="esp32_builder"
 
 # Parse command line arguments
 while getopts ":b:c:t:p:" opt; do
@@ -118,15 +119,14 @@ echo "Starting Docker container..."
 docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d
 
 # Wait a few seconds to ensure the container is running
-sleep 5
+sleep 15
 
-# Check if the project is being built from a local path or from the system environment
 if [ -n "$ESP_PROJECT_DIR" ]; then
   echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR"
-  docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py menuconfig"
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py menuconfig 2>&1 | tee /dev/tty"
 else
   echo "Running build.sh script inside the container..."
-  docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh"
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh 2>&1 | tee /dev/tty"
 fi
 
 BUILD_STATUS=$?
