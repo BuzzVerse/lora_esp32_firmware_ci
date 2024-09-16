@@ -130,7 +130,7 @@ sleep 10
 
 if [ "$IS_LOCAL_BUILD" = true ]; then
   echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR" | tee -a "$BUILD_LOGS"
-  docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py menuconfig" 2>&1 | tee -a "$BUILD_LOGS"
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py build"
 else
   echo "Running build.sh script inside the container..." | tee -a "$BUILD_LOGS"
   docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh" 2>&1 | tee -a "$BUILD_LOGS"

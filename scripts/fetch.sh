@@ -56,7 +56,9 @@ fi
 
 # Clone the repository
 echo "Cloning repository from $REPO_URL to $TARGET_DIR..."
-git clone "$REPO_URL" "$TARGET_DIR" --depth 1 2>&1
+git clone --recurse-submodules "$REPO_URL" "$TARGET_DIR" --depth 1 2>&1
+cd "$TARGET_DIR"
+git submodule update --init --recursive 2>&1
 if [ $? -ne 0 ]; then
   echo "Error: Failed to clone the repository from $REPO_URL."
   exit 1
