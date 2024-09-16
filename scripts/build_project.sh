@@ -101,10 +101,12 @@ if [ ! -f "$DOCKER_COMPOSE_FILE" ]; then
   exit 1
 fi
 
-# Ensure ownership of the tmp directory is set to the current user
-if [ -d "$ARTIFACTS_DIR" ]; then
-  echo "Setting ownership of $ARTIFACTS_DIR to the host user..." | tee -a "$BUILD_LOGS"
-  sudo chown -R $(id -u):$(id -g) "$ARTIFACTS_DIR"
+if [ "$IS_LOCAL_BUILD" = false ]; then
+  # Ensure ownership of the tmp directory is set to the current user
+  if [ -d "$ARTIFACTS_DIR" ]; then
+    echo "Setting ownership of $ARTIFACTS_DIR to the host user..." | tee -a "$BUILD_LOGS"
+    sudo chown -R $(id -u):$(id -g) "$ARTIFACTS_DIR"
+  fi
 fi
 
 # If not a local build, prepare artifacts directory

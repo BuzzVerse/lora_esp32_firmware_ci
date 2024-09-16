@@ -2220,3 +2220,98 @@ Stopping and removing the Docker container...
  Network lora_esp32_firmware_ci_default  Removing
  Network lora_esp32_firmware_ci_default  Removed
 Returning to the original directory: /home/bartek
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load .dockerignore
+#1 transferring context: 2B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load build definition from Dockerfile
+#2 transferring dockerfile: 946B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 2.0s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Launching menuconfig for ESP-IDF project at: /home/bartek/workspace/lora_esp32_firmware
+Please use idf.py only in an ESP-IDF shell environment.
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace/lora_esp32_firmware
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 0.8s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Launching menuconfig for ESP-IDF project at: /home/bartek/workspace/lora_esp32_firmware
+Please use idf.py only in an ESP-IDF shell environment.
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace/lora_esp32_firmware
