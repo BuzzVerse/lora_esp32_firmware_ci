@@ -745,3 +745,1478 @@ Stopping and removing the Docker container...
  Network lora_esp32_firmware_ci_default  Removing
  Network lora_esp32_firmware_ci_default  Removed
 Returning to the original directory: /home/bartek
+REPO_URL: https://github.com/BuzzVerse/lora_esp32_firmware.git
+TARGET_DIR: ./tmp
+BRANCH: main
+Setting ownership of ./tmp to the host user...
+Cleaning the existing ./tmp directory...
+Cloning repository from https://github.com/BuzzVerse/lora_esp32_firmware.git to ./tmp...
+Klonowanie do „./tmp”...
+Checking out branch 'main'...
+Już jesteś na „main”
+Twoja gałąź jest na bieżąco z „origin/main”.
+Repository fetched successfully into ./tmp.
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Cleaning existing artifacts directory: /home/bartek/workspace/lora_esp32_firmware_ci/artifacts
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load .dockerignore
+#1 transferring context: 2B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load build definition from Dockerfile
+#2 transferring dockerfile: 946B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 1.4s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- IDF_TARGET not set, using default target: esp32
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Build succeeded!
+Copying build artifacts from container to /home/bartek/workspace/lora_esp32_firmware_ci/artifacts...
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace/lora_esp32_firmware_ci
+REPO_URL: https://github.com/BuzzVerse/lora_esp32_firmware.git
+TARGET_DIR: ./tmp
+BRANCH: main
+Creating ./tmp directory...
+Cloning repository from https://github.com/BuzzVerse/lora_esp32_firmware.git to ./tmp...
+Klonowanie do „./tmp”...
+Error: No valid branch, tag, or commit provided.
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Cleaning existing artifacts directory: /home/bartek/workspace/lora_esp32_firmware_ci/artifacts
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 1.7s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DIDF_TARGET=esp32 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Build succeeded!
+Copying build artifacts from container to /home/bartek/workspace/lora_esp32_firmware_ci/artifacts...
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace/lora_esp32_firmware_ci
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Cleaning existing artifacts directory: /home/bartek/workspace/lora_esp32_firmware_ci/artifacts
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 1.4s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DIDF_TARGET=esp32 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Build succeeded!
+Copying build artifacts from container to /home/bartek/workspace/lora_esp32_firmware_ci/artifacts...
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load .dockerignore
+#1 transferring context: 2B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load build definition from Dockerfile
+#2 transferring dockerfile: 946B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 0.7s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#5 CACHED
+
+#6 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DIDF_TARGET=esp32 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 0.7s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DIDF_TARGET=esp32 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+time="2024-09-16T16:14:01+02:00" level=warning msg="The \"ESP_PROJECT_DIR\" variable is not set. Defaulting to a blank string."
+1 error(s) decoding:
+
+* error decoding 'volumes[2]': invalid spec: :/usr/local/build: empty section between colons
+Running build.sh script inside the container...
+Error response from daemon: No such container: esp32_builder
+Stopping and removing the Docker container...
+time="2024-09-16T16:14:11+02:00" level=warning msg="The \"ESP_PROJECT_DIR\" variable is not set. Defaulting to a blank string."
+1 error(s) decoding:
+
+* error decoding 'volumes[2]': invalid spec: :/usr/local/build: empty section between colons
+Returning to the original directory: /home/bartek/workspace
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+parsing /home/bartek/workspace/lora_esp32_firmware_ci/docker-compose.yml: invalid interpolation format for services.esp32_build.volumes.[].
+You may need to escape any $ with another $.
+${ESP_PROJECT_DIR:}:/usr/local/build
+Running build.sh script inside the container...
+Error response from daemon: No such container: esp32_builder
+Stopping and removing the Docker container...
+parsing /home/bartek/workspace/lora_esp32_firmware_ci/docker-compose.yml: invalid interpolation format for services.esp32_build.volumes.[].
+You may need to escape any $ with another $.
+${ESP_PROJECT_DIR:}:/usr/local/build
+Returning to the original directory: /home/bartek/workspace
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+1 error(s) decoding:
+
+* error decoding 'volumes[2]': invalid spec: :/usr/local/build: empty section between colons
+Running build.sh script inside the container...
+Error response from daemon: No such container: esp32_builder
+Stopping and removing the Docker container...
+1 error(s) decoding:
+
+* error decoding 'volumes[2]': invalid spec: :/usr/local/build: empty section between colons
+Returning to the original directory: /home/bartek/workspace
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load .dockerignore
+#1 transferring context: 2B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load build definition from Dockerfile
+#2 transferring dockerfile: 946B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 1.3s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#5 CACHED
+
+#6 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DIDF_TARGET=esp32 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 0.7s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#5 CACHED
+
+#6 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- IDF_TARGET not set, using default target: esp32
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace
+REPO_URL: https://github.com/BuzzVerse/lora_esp32_firmware.git
+TARGET_DIR: ./tmp
+BRANCH: main
+Setting ownership of ./tmp to the host user...
+Cleaning the existing ./tmp directory...
+Cloning repository from https://github.com/BuzzVerse/lora_esp32_firmware.git to ./tmp...
+Klonowanie do „./tmp”...
+Checking out branch 'main'...
+Już jesteś na „main”
+Twoja gałąź jest na bieżąco z „origin/main”.
+Repository fetched successfully into ./tmp.
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Cleaning existing artifacts directory: /home/bartek/workspace/lora_esp32_firmware_ci/artifacts
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 1.3s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#5 CACHED
+
+#6 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- IDF_TARGET not set, using default target: esp32
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Build succeeded!
+Copying build artifacts from container to /home/bartek/workspace/lora_esp32_firmware_ci/artifacts...
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek/workspace
+REPO_URL: https://github.com/BuzzVerse/lora_esp32_firmware.git
+TARGET_DIR: ./tmp
+BRANCH: main
+Setting ownership of ./tmp to the host user...
+Cleaning the existing ./tmp directory...
+Cloning repository from https://github.com/BuzzVerse/lora_esp32_firmware.git to ./tmp...
+Klonowanie do „./tmp”...
+Error: No valid branch, tag, or commit provided.
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Cleaning existing artifacts directory: /home/bartek/workspace/lora_esp32_firmware_ci/artifacts
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 0.7s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#5 CACHED
+
+#6 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load .dockerignore
+#1 transferring context: 2B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load build definition from Dockerfile
+#2 transferring dockerfile: 946B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 1.7s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Launching menuconfig for ESP-IDF project at: /home/bartek/workspace/lora_esp32_firmware
+Please use idf.py only in an ESP-IDF shell environment.
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek
+REPO_URL: https://github.com/BuzzVerse/lora_esp32_firmware.git
+TARGET_DIR: ./tmp
+BRANCH: main
+Setting ownership of ./tmp to the host user...
+Cleaning the existing ./tmp directory...
+Cloning repository from https://github.com/BuzzVerse/lora_esp32_firmware.git to ./tmp...
+Klonowanie do „./tmp”...
+Checking out branch 'main'...
+Już jesteś na „main”
+Twoja gałąź jest na bieżąco z „origin/main”.
+Repository fetched successfully into ./tmp.
+Setting ownership of /home/bartek/workspace/lora_esp32_firmware_ci/artifacts to the host user...
+Cleaning existing artifacts directory: /home/bartek/workspace/lora_esp32_firmware_ci/artifacts
+Starting Docker container...
+#0 building with "default" instance using docker driver
+
+#1 [esp32_build internal] load build definition from Dockerfile
+#1 transferring dockerfile: 946B done
+#1 DONE 0.0s
+
+#2 [esp32_build internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [esp32_build internal] load metadata for docker.io/espressif/idf:v5.0
+#3 DONE 0.7s
+
+#4 [esp32_build 1/4] FROM docker.io/espressif/idf:v5.0@sha256:e72dca3636c0b4d6d6c99f6baaec6681f2aac313830a84143eb892c408a4096d
+#4 DONE 0.0s
+
+#5 [esp32_build 2/4] RUN apt-get update && apt-get install -y     git     cmake     ninja-build     wget     python3-pip     bash     tzdata &&     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime &&     dpkg-reconfigure --frontend noninteractive tzdata
+#5 CACHED
+
+#6 [esp32_build 3/4] RUN echo ". /opt/esp/idf/export.sh" >> ~/.bashrc
+#6 CACHED
+
+#7 [esp32_build 4/4] WORKDIR /workspace
+#7 CACHED
+
+#8 [esp32_build] exporting to image
+#8 exporting layers done
+#8 writing image sha256:edb92078ac9e20345486c04147f262c6ebf3f4d8d4eb35595c645fa2591da2bd done
+#8 naming to docker.io/library/my-esp32-image:latest done
+#8 DONE 0.0s
+ Network lora_esp32_firmware_ci_default  Creating
+ Network lora_esp32_firmware_ci_default  Created
+ Container esp32_builder  Creating
+ Container esp32_builder  Created
+ Container esp32_builder  Starting
+ Container esp32_builder  Started
+Running build.sh script inside the container...
+Detecting the Python interpreter
+Checking "python3" ...
+Python 3.8.10
+"python3" has been detected
+Checking Python compatibility
+Checking other ESP-IDF version.
+Adding ESP-IDF tools to PATH...
+Using a supported version of tool cmake found in PATH: 3.16.3.
+However the recommended version is 3.24.0.
+Checking if Python packages are up to date...
+Requirement files:
+ - /opt/esp/idf/tools/requirements/requirements.core.txt
+Python being checked: /opt/esp/python_env/idf5.0_py3.8_env/bin/python
+Python requirements are satisfied.
+Added the following directories to PATH:
+  /opt/esp/idf/components/esptool_py/esptool
+  /opt/esp/idf/components/espcoredump
+  /opt/esp/idf/components/partition_table
+  /opt/esp/idf/components/app_update
+  /opt/esp/tools/xtensa-esp-elf-gdb/11.2_20220823/xtensa-esp-elf-gdb/bin
+  /opt/esp/tools/riscv32-esp-elf-gdb/11.2_20220823/riscv32-esp-elf-gdb/bin
+  /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin
+  /opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin
+  /opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin
+  /opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin
+  /opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin
+  /opt/esp/tools/openocd-esp32/v0.11.0-esp32-20221026/openocd-esp32/bin
+  /opt/esp/python_env/idf5.0_py3.8_env/bin
+
+Detected installed tools that are not currently used by active ESP-IDF version.
+For removing cmake use command 'python /opt/esp/idf/tools/idf_tools.py uninstall'
+To free up even more space, remove installation packages of those tools. Use option 'python3 /opt/esp/idf/tools/idf_tools.py uninstall --remove-archives'.
+
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+Executing action: all (aliases: build)
+Running cmake in directory /usr/local/build/build
+Executing "cmake -G Ninja -DPYTHON_DEPS_CHECKED=1 -DESP_PLATFORM=1 -DCCACHE_ENABLE=1 /usr/local/build"...
+-- IDF_TARGET not set, using default target: esp32
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- ccache will be used for faster recompilation
+-- The C compiler identification is GNU 11.2.0
+-- The CXX compiler identification is GNU 11.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+-- Check for working C compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++
+-- Check for working CXX compiler: /opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Project is not inside a git repository, or git repository has no commits; will not use 'git describe' to determine PROJECT_VER.
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /usr/local/build/sdkconfig
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of time_t
+-- Check size of time_t - done
+-- Found Python3: /opt/esp/python_env/idf5.0_py3.8_env/bin/python (found version "3.8.10") found components: Interpreter 
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS
+-- Performing Test C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS - Success
+-- App "lora_esp32_firmware" version: 1
+-- Adding linker script /usr/local/build/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /opt/esp/idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /opt/esp/idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /opt/esp/idf/components/soc/esp32/ld/esp32.peripherals.ld
+CMake Error at /opt/esp/idf/tools/cmake/component.cmake:312 (message):
+  Include directory
+  '/usr/local/build/components/lora/include/protocols/packet' is not a
+  directory.
+Call Stack (most recent call first):
+  /opt/esp/idf/tools/cmake/component.cmake:486 (__component_add_include_dirs)
+  components/lora/CMakeLists.txt:3 (idf_component_register)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/usr/local/build/build/CMakeFiles/CMakeOutput.log".
+cmake failed with exit code 1, output of the command is in the /usr/local/build/build/log/idf_py_stderr_output_182 and /usr/local/build/build/log/idf_py_stdout_output_182
+Build failed. Check logs for more details.
+Build succeeded!
+Copying build artifacts from container to /home/bartek/workspace/lora_esp32_firmware_ci/artifacts...
+Stopping and removing the Docker container...
+ Container esp32_builder  Stopping
+ Container esp32_builder  Stopped
+ Container esp32_builder  Removing
+ Container esp32_builder  Removed
+ Network lora_esp32_firmware_ci_default  Removing
+ Network lora_esp32_firmware_ci_default  Removed
+Returning to the original directory: /home/bartek

@@ -2,19 +2,12 @@
 
 # Usage: build_project.sh [-b branch_name | -t tag | -c commit_hash | -p project_path]
 
-# Check if PROJECT_DIR environment variable is set
-if [ -z "$PROJECT_DIR" ]; then
-  echo "Error: PROJECT_DIR environment variable is not set. Please ensure it is set by running install.sh."
-  echo "Example: sudo ./install.sh"
-  exit 1
-fi
-
 # Initialize variables
-ESP_PROJECT_DIR=""
-DEFAULT_ESP_PROJECT=${ESP_PROJECT_DIR:-$PROJECT_DIR/esp_project}
+CURRENT_ESP_PROJECT_DIR=""
 CONTAINER_NAME="esp32_builder"
+IS_LOCAL_BUILD=false
 
-# Parse command line arguments
+# Parse command line arguments first
 while getopts ":b:c:t:p:" opt; do
   case ${opt} in
     b )
@@ -28,6 +21,7 @@ while getopts ":b:c:t:p:" opt; do
       ;;
     p )
       ESP_PROJECT_DIR=$OPTARG
+      IS_LOCAL_BUILD=true
       ;;
     \? )
       echo "Invalid option: -$OPTARG" 1>&2
@@ -40,56 +34,64 @@ while getopts ":b:c:t:p:" opt; do
   esac
 done
 
-# If no parameters are provided, check if ESP_PROJECT_DIR is set and use it as default
-if [ -z "$BRANCH" ] && [ -z "$COMMIT" ] && [ -z "$TAG" ] && [ -z "$ESP_PROJECT_DIR" ]; then
-  if [ -z "$DEFAULT_ESP_PROJECT" ]; then
-    echo "No parameters provided and no default project set."
-    echo "Please configure your ESP32 project path using the install script."
-    echo "Example: sudo ./install.sh"
+# Now check if any arguments are passed
+if [ $# -eq 0 ]; then
+  # No parameters passed, check if LOCAL_ESP_PROJECT_PATH is set
+  if [ -z "$LOCAL_ESP_PROJECT_PATH" ]; then
+    echo "Error: No parameters provided and LOCAL_ESP_PROJECT_PATH is not set."
+    echo "Provide a project path with -p option or set LOCAL_ESP_PROJECT_PATH environment variable."
     exit 1
   else
-    echo "No parameters provided, building default ESP32 project: $DEFAULT_ESP_PROJECT"
-    ESP_PROJECT_DIR="$DEFAULT_ESP_PROJECT"
+    # Use LOCAL_ESP_PROJECT_PATH if no parameters are passed but the environment variable is set
+    echo "No parameters provided, using default: $LOCAL_ESP_PROJECT_PATH"
+    ESP_PROJECT_DIR="$LOCAL_ESP_PROJECT_PATH"
+    IS_LOCAL_BUILD=true  # Treat it as a local build if no parameters provided
   fi
 fi
 
-# Check if the provided or default project path exists and is a valid ESP32 project
-if [ -n "$ESP_PROJECT_DIR" ]; then
-  if [ ! -d "$ESP_PROJECT_DIR" ]; then
-    echo "Error: The provided project directory does not exist: $ESP_PROJECT_DIR"
-    exit 1
-  fi
+# If ESP_PROJECT_DIR is still not set, use default /tmp directory
+if [ -z "$ESP_PROJECT_DIR" ]; then
+  ESP_PROJECT_DIR="$ESP_CI_PROJECT_DIR/tmp"
+fi
 
-  # Check for the presence of `idf_component_register` in the CMakeLists.txt file
-  CMAKE_FILE="$ESP_PROJECT_DIR/main/CMakeLists.txt"
-  if [ ! -f "$CMAKE_FILE" ] || ! grep -q "idf_component_register" "$CMAKE_FILE"; then
-    echo "Error: The project in $ESP_PROJECT_DIR is not a valid ESP32 project."
-    echo "Missing 'idf_component_register' in $CMAKE_FILE"
-    exit 1
-  fi
+# Check if the provided or default project path exists and is a valid ESP32 project
+if [ ! -d "$ESP_PROJECT_DIR" ]; then
+  echo "Error: The project directory does not exist: $ESP_PROJECT_DIR"
+  exit 1
+fi
+
+# Check for the presence of `idf_component_register` in the CMakeLists.txt file
+CMAKE_FILE="$ESP_PROJECT_DIR/main/CMakeLists.txt"
+if [ ! -f "$CMAKE_FILE" ] || ! grep -q "idf_component_register" "$CMAKE_FILE"; then
+  echo "Error: The project in $ESP_PROJECT_DIR is not a valid ESP32 project."
+  echo "Missing 'idf_component_register' in $CMAKE_FILE"
+  exit 1
 fi
 
 # Save the current directory to return to it later
 CURRENT_DIR=$(pwd)
 
 # Change to the project directory
-echo "Changing to project directory: $ESP_PROJECT_DIR"
-cd "$ESP_PROJECT_DIR"
+echo "Changing to CI project directory: $ESP_CI_PROJECT_DIR"
+cd "$ESP_CI_PROJECT_DIR"
 
 # Define paths relative to PROJECT_DIR
-FETCH_SCRIPT="$PROJECT_DIR/scripts/fetch.sh"
-DOCKER_COMPOSE_FILE="$PROJECT_DIR/docker-compose.yml"
+FETCH_SCRIPT="$ESP_CI_PROJECT_DIR/scripts/fetch.sh"
+DOCKER_COMPOSE_FILE="$ESP_CI_PROJECT_DIR/docker-compose.yml"
 CONTAINER_NAME="esp32_builder"
-ARTIFACTS_DIR="$PROJECT_DIR/artifacts"
-BUILD_LOGS="$PROJECT_DIR/build_logs.txt"
+ARTIFACTS_DIR="$ESP_CI_PROJECT_DIR/artifacts"
+BUILD_LOGS="$ESP_CI_PROJECT_DIR/build_logs.txt"
 
-# Run the fetch_code.sh script with the same arguments
-echo "Running fetch_code.sh to pull the desired version of the repository..."
-bash "$FETCH_SCRIPT" "$@" 2>&1 | tee -a "$BUILD_LOGS"
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to fetch code." | tee -a "$BUILD_LOGS"
-  cd "$CURRENT_DIR"
-  exit 1
+# Only run fetch_code.sh if we are not doing a local build
+if [ "$IS_LOCAL_BUILD" = false ]; then
+  # Run the fetch_code.sh script with the same arguments
+  echo "Running fetch_code.sh to pull the desired version of the repository..."
+  bash "$FETCH_SCRIPT" "$@" 2>&1 | tee -a "$BUILD_LOGS"
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to fetch code." | tee -a "$BUILD_LOGS"
+    cd "$CURRENT_DIR"
+    exit 1
+  fi
 fi
 
 # Check if the docker-compose file exists
@@ -105,23 +107,26 @@ if [ -d "$ARTIFACTS_DIR" ]; then
   sudo chown -R $(id -u):$(id -g) "$ARTIFACTS_DIR"
 fi
 
-# Prepare the ARTIFACTS_DIR
-if [ -d "$ARTIFACTS_DIR" ]; then
-  echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
-  rm -rf "$ARTIFACTS_DIR/"{*,.[!.]*,..?*} 2>/dev/null
-else
-  echo "Creating artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
-  mkdir -p "$ARTIFACTS_DIR"
+# If not a local build, prepare artifacts directory
+if [ "$IS_LOCAL_BUILD" = false ]; then
+  if [ -d "$ARTIFACTS_DIR" ]; then
+    echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
+    rm -rf "$ARTIFACTS_DIR/"{*,.[!.]*,..?*} 2>/dev/null
+  else
+    echo "Creating artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
+    mkdir -p "$ARTIFACTS_DIR"
+  fi
 fi
 
 # Start the Docker container
 echo "Starting Docker container..." | tee -a "$BUILD_LOGS"
+export ESP_PROJECT_DIR
 docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d 2>&1 | tee -a "$BUILD_LOGS"
 
 # Wait a few seconds to ensure the container is running
 sleep 10
 
-if [ -n "$ESP_PROJECT_DIR" ]; then
+if [ "$IS_LOCAL_BUILD" = true ]; then
   echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR" | tee -a "$BUILD_LOGS"
   docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py menuconfig" 2>&1 | tee -a "$BUILD_LOGS"
 else
@@ -131,16 +136,18 @@ fi
 
 BUILD_STATUS=$?
 
-# Fetch build logs from the container
-if [ $BUILD_STATUS -ne 0 ]; then
-  echo "Build failed. Fetching container logs..." | tee -a "$BUILD_LOGS"
-  docker logs "$CONTAINER_NAME" | tee -a "$BUILD_LOGS"
-else
-  echo "Build succeeded!" | tee -a "$BUILD_LOGS"
+if [ "$IS_LOCAL_BUILD" = false ]; then
+  # Fetch build logs from the container
+  if [ $BUILD_STATUS -ne 0 ]; then
+    echo "Build failed. Fetching container logs..." | tee -a "$BUILD_LOGS"
+    docker logs "$CONTAINER_NAME" | tee -a "$BUILD_LOGS"
+  else
+    echo "Build succeeded!" | tee -a "$BUILD_LOGS"
 
-  # Copy build artifacts from the container to the ARTIFACTS_DIR
-  echo "Copying build artifacts from container to $ARTIFACTS_DIR..." | tee -a "$BUILD_LOGS"
-  docker cp "$CONTAINER_NAME:/usr/local/build" "$ARTIFACTS_DIR"
+    # Copy build artifacts from the container to the ARTIFACTS_DIR
+    echo "Copying build artifacts from container to $ARTIFACTS_DIR..." | tee -a "$BUILD_LOGS"
+    docker cp "$CONTAINER_NAME:/usr/local/build" "$ARTIFACTS_DIR"
+  fi
 fi
 
 # Stop and remove the Docker container
