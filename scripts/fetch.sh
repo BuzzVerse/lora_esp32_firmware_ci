@@ -54,6 +54,8 @@ else
   mkdir -p "$TARGET_DIR"
 fi
 
+
+
 # Clone the repository
 echo "Cloning repository from $REPO_URL to $TARGET_DIR..."
 git clone --recurse-submodules "$REPO_URL" "$TARGET_DIR" --depth 1 2>&1
@@ -63,8 +65,6 @@ if [ $? -ne 0 ]; then
   echo "Error: Failed to clone the repository from $REPO_URL."
   exit 1
 fi
-
-cd "$TARGET_DIR"
 
 # Fetch all branches and tags
 git fetch --all

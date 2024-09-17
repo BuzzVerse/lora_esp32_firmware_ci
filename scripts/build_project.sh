@@ -7,29 +7,42 @@ CURRENT_ESP_PROJECT_DIR=""
 CONTAINER_NAME="esp32_builder"
 IS_LOCAL_BUILD=false
 
-# Use SCRIPT_DIR if ESP_CI_PROJECT_DIR is not set
-ESP_CI_PROJECT_DIR="${ESP_CI_PROJECT_DIR:-$SCRIPT_DIR}"
+# Save the current directory to return to it later
+CURRENT_DIR=$(pwd)
+
+# Sprawdzanie, czy zmienna ESP_CI_PROJECT_DIR jest ustawiona
+if [ -z "$ESP_CI_PROJECT_DIR" ]; then
+  # Jeśli zmienna nie jest ustawiona, ustawiamy ją na ścieżkę katalogu, w którym znajduje się skrypt
+   ESP_CI_PROJECT_DIR="$(dirname "$(dirname "$(realpath "$0")")")"
+  echo "Zmienna ESP_CI_PROJECT_DIR nie była ustawiona. Ustawiono na: $ESP_CI_PROJECT_DIR"
+else
+  echo "Zmienna ESP_CI_PROJECT_DIR jest już ustawiona na: $ESP_CI_PROJECT_DIR"
+fi
 
 cd "$ESP_CI_PROJECT_DIR"
+
+echo "ESP CI project dir: $ESP_CI_PROJECT_DIR"
 
 # Define paths relative to PROJECT_DIR
 FETCH_SCRIPT="$ESP_CI_PROJECT_DIR/scripts/fetch.sh"
 DOCKER_COMPOSE_FILE="$ESP_CI_PROJECT_DIR/docker-compose.yml"
 CONTAINER_NAME="esp32_builder"
 ARTIFACTS_DIR="$ESP_CI_PROJECT_DIR/artifacts"
-BUILD_LOGS="$ESP_CI_PROJECT_DIR/build_logs.txt"
 
 # Parse command line arguments first
 while getopts ":b:c:t:p:" opt; do
   case ${opt} in
     b )
       BRANCH=$OPTARG
+      IS_REMOTE_BUILD=true
       ;;
     c )
       COMMIT=$OPTARG
+      IS_REMOTE_BUILD=true
       ;;
     t )
       TAG=$OPTARG
+      IS_REMOTE_BUILD=true
       ;;
     p )
       ESP_PROJECT_DIR=$OPTARG
@@ -46,6 +59,11 @@ while getopts ":b:c:t:p:" opt; do
   esac
 done
 
+# Set ESP_PROJECT_DIR to $ESP_CI_PROJECT_DIR/tmp if any of c, b, or t are passed
+if [ "$IS_REMOTE_BUILD" = true ]; then
+  ESP_PROJECT_DIR="$ESP_CI_PROJECT_DIR/tmp"
+fi
+
 # Now check if any arguments are passed
 if [ $# -eq 0 ]; then
   # No parameters passed, check if LOCAL_ESP_PROJECT_PATH is set
@@ -61,15 +79,16 @@ if [ $# -eq 0 ]; then
   fi
 fi
 
-# If ESP_PROJECT_DIR is still not set, use default /tmp directory
-if [ -z "$ESP_PROJECT_DIR" ]; then
-  ESP_PROJECT_DIR="$ESP_CI_PROJECT_DIR/tmp"
-fi
-
-# Check if the provided or default project path exists and is a valid ESP32 project
-if [ ! -d "$ESP_PROJECT_DIR" ]; then
-  echo "Error: The project directory does not exist: $ESP_PROJECT_DIR"
-  exit 1
+# Only run fetch_code.sh if we are not doing a local build
+if [ "$IS_LOCAL_BUILD" = false ]; then
+  # Run the fetch_code.sh script with the same arguments
+  echo "Running fetch_code.sh to pull the desired version of the repository..."
+  bash "$FETCH_SCRIPT" "$@" 2>&1
+  if [ $? -ne 0 ]; then
+    echo "Error: Failed to fetch code."
+    cd "$CURRENT_DIR"
+    exit 1
+  fi
 fi
 
 # Check for the presence of `idf_component_register` in the CMakeLists.txt file
@@ -80,29 +99,9 @@ if [ ! -f "$CMAKE_FILE" ] || ! grep -q "idf_component_register" "$CMAKE_FILE"; t
   exit 1
 fi
 
-# Save the current directory to return to it later
-CURRENT_DIR=$(pwd)
-
-# Change to the project directory
-echo "Changing to CI project directory: $ESP_CI_PROJECT_DIR"
-# Get the directory where the script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Only run fetch_code.sh if we are not doing a local build
-if [ "$IS_LOCAL_BUILD" = false ]; then
-  # Run the fetch_code.sh script with the same arguments
-  echo "Running fetch_code.sh to pull the desired version of the repository..."
-  bash "$FETCH_SCRIPT" "$@" 2>&1 | tee -a "$BUILD_LOGS"
-  if [ $? -ne 0 ]; then
-    echo "Error: Failed to fetch code." | tee -a "$BUILD_LOGS"
-    cd "$CURRENT_DIR"
-    exit 1
-  fi
-fi
-
 # Check if the docker-compose file exists
 if [ ! -f "$DOCKER_COMPOSE_FILE" ]; then
-  echo "Error: Docker Compose file ($DOCKER_COMPOSE_FILE) not found." | tee -a "$BUILD_LOGS"
+  echo "Error: Docker Compose file ($DOCKER_COMPOSE_FILE) not found."
   cd "$CURRENT_DIR"
   exit 1
 fi
@@ -110,7 +109,7 @@ fi
 if [ "$IS_LOCAL_BUILD" = false ]; then
   # Ensure ownership of the tmp directory is set to the current user
   if [ -d "$ARTIFACTS_DIR" ]; then
-    echo "Setting ownership of $ARTIFACTS_DIR to the host user..." | tee -a "$BUILD_LOGS"
+    echo "Setting ownership of $ARTIFACTS_DIR to the host user..."
     sudo chown -R $(id -u):$(id -g) "$ARTIFACTS_DIR"
   fi
 fi
@@ -118,28 +117,28 @@ fi
 # If not a local build, prepare artifacts directory
 if [ "$IS_LOCAL_BUILD" = false ]; then
   if [ -d "$ARTIFACTS_DIR" ]; then
-    echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
+    echo "Cleaning existing artifacts directory: $ARTIFACTS_DIR"
     rm -rf "$ARTIFACTS_DIR/"{*,.[!.]*,..?*} 2>/dev/null
   else
-    echo "Creating artifacts directory: $ARTIFACTS_DIR" | tee -a "$BUILD_LOGS"
+    echo "Creating artifacts directory: $ARTIFACTS_DIR"
     mkdir -p "$ARTIFACTS_DIR"
   fi
 fi
 
 # Start the Docker container
-echo "Starting Docker container..." | tee -a "$BUILD_LOGS"
+echo "Starting Docker container..."
 export ESP_PROJECT_DIR
-docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d 2>&1 | tee -a "$BUILD_LOGS"
+docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d 2>&1
 
 # Wait a few seconds to ensure the container is running
 sleep 10
 
 if [ "$IS_LOCAL_BUILD" = true ]; then
-  echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR" | tee -a "$BUILD_LOGS"
+  echo "Launching menuconfig for ESP-IDF project at: $ESP_PROJECT_DIR"
   docker exec -it "$CONTAINER_NAME" /bin/bash -c "cd /usr/local/build && idf.py build"
 else
-  echo "Running build.sh script inside the container..." | tee -a "$BUILD_LOGS"
-  docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh" 2>&1 | tee -a "$BUILD_LOGS"
+  echo "Running build.sh script inside the container..."
+  docker exec -it "$CONTAINER_NAME" /bin/bash -c "/usr/local/scripts/build.sh" 2>&1
 fi
 
 BUILD_STATUS=$?
@@ -147,21 +146,21 @@ BUILD_STATUS=$?
 if [ "$IS_LOCAL_BUILD" = false ]; then
   # Fetch build logs from the container
   if [ $BUILD_STATUS -ne 0 ]; then
-    echo "Build failed. Fetching container logs..." | tee -a "$BUILD_LOGS"
-    docker logs "$CONTAINER_NAME" | tee -a "$BUILD_LOGS"
+    echo "Build failed. Fetching container logs..."
+    docker logs "$CONTAINER_NAME"
   else
-    echo "Build succeeded!" | tee -a "$BUILD_LOGS"
+    echo "Build succeeded!"
 
     # Copy build artifacts from the container to the ARTIFACTS_DIR
-    echo "Copying build artifacts from container to $ARTIFACTS_DIR..." | tee -a "$BUILD_LOGS"
+    echo "Copying build artifacts from container to $ARTIFACTS_DIR..."
     docker cp "$CONTAINER_NAME:/usr/local/build" "$ARTIFACTS_DIR"
   fi
 fi
 
 # Stop and remove the Docker container
-echo "Stopping and removing the Docker container..." | tee -a "$BUILD_LOGS"
-docker-compose -f "$DOCKER_COMPOSE_FILE" down 2>&1 | tee -a "$BUILD_LOGS"
+echo "Stopping and removing the Docker container..."
+docker-compose -f "$DOCKER_COMPOSE_FILE" down 2>&1
 
 # Return to the original directory
-echo "Returning to the original directory: $CURRENT_DIR" | tee -a "$BUILD_LOGS"
+echo "Returning to the original directory: $CURRENT_DIR"
 cd "$CURRENT_DIR"
