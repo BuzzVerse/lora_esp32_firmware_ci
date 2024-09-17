@@ -7,6 +7,18 @@ CURRENT_ESP_PROJECT_DIR=""
 CONTAINER_NAME="esp32_builder"
 IS_LOCAL_BUILD=false
 
+# Use SCRIPT_DIR if ESP_CI_PROJECT_DIR is not set
+ESP_CI_PROJECT_DIR="${ESP_CI_PROJECT_DIR:-$SCRIPT_DIR}"
+
+cd "$ESP_CI_PROJECT_DIR"
+
+# Define paths relative to PROJECT_DIR
+FETCH_SCRIPT="$ESP_CI_PROJECT_DIR/scripts/fetch.sh"
+DOCKER_COMPOSE_FILE="$ESP_CI_PROJECT_DIR/docker-compose.yml"
+CONTAINER_NAME="esp32_builder"
+ARTIFACTS_DIR="$ESP_CI_PROJECT_DIR/artifacts"
+BUILD_LOGS="$ESP_CI_PROJECT_DIR/build_logs.txt"
+
 # Parse command line arguments first
 while getopts ":b:c:t:p:" opt; do
   case ${opt} in
@@ -73,14 +85,8 @@ CURRENT_DIR=$(pwd)
 
 # Change to the project directory
 echo "Changing to CI project directory: $ESP_CI_PROJECT_DIR"
-cd "$ESP_CI_PROJECT_DIR"
-
-# Define paths relative to PROJECT_DIR
-FETCH_SCRIPT="$ESP_CI_PROJECT_DIR/scripts/fetch.sh"
-DOCKER_COMPOSE_FILE="$ESP_CI_PROJECT_DIR/docker-compose.yml"
-CONTAINER_NAME="esp32_builder"
-ARTIFACTS_DIR="$ESP_CI_PROJECT_DIR/artifacts"
-BUILD_LOGS="$ESP_CI_PROJECT_DIR/build_logs.txt"
+# Get the directory where the script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Only run fetch_code.sh if we are not doing a local build
 if [ "$IS_LOCAL_BUILD" = false ]; then
