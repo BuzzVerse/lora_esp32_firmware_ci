@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "The SSH key has been generated."
+echo "Below is the public key that needs to be added to GitHub:"
+echo "-----------------------------------------"
+echo "      ██████                                  "
+echo "    ██    ░░████                              "
+echo "  ██  ░░░░░░░░  ████                          "
+echo "██  ░░░░██░░░░░░    ████████████████████████  "
+echo "██  ░░██  ██▒▒░░░░░░░░░░░░░░░░░░░░░░░░░░    ██"
+echo "██░░░░██  ██▒▒░░░░░░░░░░░░░░░░░░░░░░██░░░░░░██"
+echo "██░░░░░░██░░░░░░░░░░████████████▒▒██  ██░░▒▒██"
+echo "  ██░░░░░░░░░░░░████          ██▒▒██  ██▒▒▒▒██"
+echo "    ██░░░░░░████                ██      ████  "
+echo "      ██████                                  "
+echo "-----------------------------------------"
+echo "SSH Key:"
+cat /root/.ssh/id_ed25519.pub
+echo "-----------------------------------------"
+echo "To add the key to GitHub, go to: https://github.com/settings/keys"

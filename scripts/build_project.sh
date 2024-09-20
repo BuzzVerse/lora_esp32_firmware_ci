@@ -10,6 +10,9 @@ IS_LOCAL_BUILD=false
 # Save the current directory to return to it later
 CURRENT_DIR=$(pwd)
 
+# Path to the .ssh directory (change this to your project's path)
+SSH_DIR="/ssh"
+
 # Sprawdzanie, czy zmienna ESP_CI_PROJECT_DIR jest ustawiona
 if [ -z "$ESP_CI_PROJECT_DIR" ]; then
   # Jeśli zmienna nie jest ustawiona, ustawiamy ją na ścieżkę katalogu, w którym znajduje się skrypt
@@ -58,6 +61,16 @@ while getopts ":b:c:t:p:" opt; do
       ;;
   esac
 done
+
+# Check if the .ssh directory exists
+if [ ! -d "$SSH_DIR" ]; then
+    echo "The directory $SSH_DIR does not exist. Creating the directory..."
+    mkdir -p "$SSH_DIR"
+    chmod 700 "$SSH_DIR"
+    echo "The directory $SSH_DIR has been created."
+else
+    echo "The directory $SSH_DIR already exists."
+fi
 
 # Set ESP_PROJECT_DIR to $ESP_CI_PROJECT_DIR/tmp if any of c, b, or t are passed
 if [ "$IS_REMOTE_BUILD" = true ]; then
@@ -128,7 +141,7 @@ fi
 # Start the Docker container
 echo "Starting Docker container..."
 export ESP_PROJECT_DIR
-docker-compose -f "$DOCKER_COMPOSE_FILE" up --build -d 2>&1
+docker compose -f "$DOCKER_COMPOSE_FILE" up --build -d 2>&1
 
 # Wait a few seconds to ensure the container is running
 sleep 10

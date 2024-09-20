@@ -1,5 +1,5 @@
 #!/bin/bash
-
+ls ~/.ssh
 # Load ESP-IDF environment
 source /opt/esp/idf/export.sh
 

@@ -11,6 +11,7 @@ services:
       - ./docker/scripts:/usr/local/scripts  # Mount the scripts directory into the container
       - ./artifacts:/usr/local/artifacts     # Mount the temporary directory for build artifacts
       - "${ESP_PROJECT_DIR}:/usr/local/build"  # Dynamic mount location for build project
+      - /ssh:/root/.ssh:ro                 # Mount the SSH directory from the CI project
     environment:
       - ESP_IDF_PATH=/opt/esp/idf            # Environment variable for ESP-IDF
     working_dir: /workspace                  # Default working directory inside the container

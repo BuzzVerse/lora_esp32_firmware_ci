@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     python3-pip \
     bash \
-    tzdata && \
+    tzdata \
+    openssh-client && \
     ln -fs /usr/share/zoneinfo/Europe/Warsaw /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata
 
@@ -27,6 +28,3 @@ RUN echo ". $IDF_PATH/export.sh" >> ~/.bashrc
 
 # Set the working directory
 WORKDIR /workspace
-
-# Set bash as the default command to run in the container
-CMD ["/bin/bash"]
