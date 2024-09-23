@@ -8,6 +8,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock      # Mounting Docker socket
       - ./docker/scripts:/usr/local/scripts  # Mount the scripts directory into the container
       - ./artifacts:/usr/local/artifacts     # Mount the temporary directory for build artifacts
       - "${ESP_PROJECT_DIR}:/usr/local/build"  # Dynamic mount location for build project

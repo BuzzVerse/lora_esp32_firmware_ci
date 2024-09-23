@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  jenkins-node:
+    image: jenkins/inbound-agent:alpine                # Current Jenkins agent image
+    container_name: jenkins-node
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock      # Mounting Docker socket
+      - ./agent:/home/jenkins/agent                    # Mounting Jenkins agent directory
+      - ./ssh:/home/jenkins/.ssh                       # Mounting SSH directory
+    environment:
+      - JENKINS_URL=https://jenkins.buzzverse.dev      # Jenkins master URL (replace with the correct URL)
+      - JENKINS_SECRET=<jenkins_encryption_key>  # Secret key to connect to master
+      - JENKINS_AGENT_NAME=jenkins-node                # Agent name
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent      # Agent work directory
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        # Setting permissions for files in the .ssh directory, only if files exist
+        chown -R jenkins:jenkins /home/jenkins/.ssh
+        [ -f /home/jenkins/.ssh/id_rsa ] && chmod 600 /home/jenkins/.ssh/id_rsa
+        [ -f /home/jenkins/.ssh/id_rsa.pub ] && chmod 644 /home/jenkins/.ssh/id_rsa.pub
+        [ -f /home/jenkins/.ssh/config ] && chmod 644 /home/jenkins/.ssh/config
+        # Run Jenkins agent with custom JNLP port
+        /usr/local/bin/jenkins-agent -url <server_address>:50000 -workDir /home/jenkins/agent
+    networks:
+      - jenkins
+
+networks:
+  jenkins:
+    driver: bridge

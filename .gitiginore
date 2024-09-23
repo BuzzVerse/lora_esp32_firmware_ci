@@ -1,5 +1,7 @@
 ./artifacts
 ./.idea
-temp
-build_logs.txt
-/ssh
+/build/tmp
+/build/artifacts/ssh
+/jenkins/node/agent
+/jenkins/node/ssh
+/jenkins/node/remoting
