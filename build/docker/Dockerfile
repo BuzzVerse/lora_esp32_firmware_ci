@@ -26,5 +26,7 @@ ENV PATH="$IDF_PATH/tools:$PATH"
 # Automatically source the ESP-IDF environment when the container starts
 RUN echo ". $IDF_PATH/export.sh" >> ~/.bashrc
 
+RUN ln -sf /opt/esp/idf/components/espcoredump/Kconfig /usr/bin/Kconfig
+
 # Set the working directory
 WORKDIR /workspace

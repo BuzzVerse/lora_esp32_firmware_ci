@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# Ensure the script is run with root privileges when necessary (for system-wide changes)
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run this script with sudo to modify system-wide settings."
-  exit 1
-fi
+CURRENT_USER=$USER
 
 # Path to the project directory (where install.sh is being run from)
 ESP_CI_PROJECT_DIR="$(pwd)"
@@ -16,7 +12,7 @@ echo "Setting up or updating project directory environment variable in $PROFILE_
 # Check if the variable already exists and update it, otherwise add it
 if grep -q "^export ESP_CI_PROJECT_DIR=" "$PROFILE_FILE"; then
   echo "Updating existing ESP_CI_PROJECT_DIR entry in $PROFILE_FILE"
-  sed -i "s|^export ESP_CI_PROJECT_DIR=.*|export ESP_CI_PROJECT_DIR=\"$ESP_CI_PROJECT_DIR\"|g" "$PROFILE_FILE"
+  sudo sed -i "s|^export ESP_CI_PROJECT_DIR=.*|export ESP_CI_PROJECT_DIR=\"$ESP_CI_PROJECT_DIR\"|g" "$PROFILE_FILE"
 else
   echo "Adding new ESP_CI_PROJECT_DIR entry to $PROFILE_FILE"
   echo "export ESP_CI_PROJECT_DIR=\"$ESP_CI_PROJECT_DIR\"" >> "$PROFILE_FILE"
@@ -53,7 +49,7 @@ fi
 # Create a symbolic link to build_project.sh in /usr/local/bin
 # This allows the script to be called globally as "build_project"
 echo "Creating symlink for build_project.sh in /usr/local/bin..."
-ln -sf "$BUILD_SCRIPT_PATH" /usr/local/bin/build_project
+sudo ln -sf "$BUILD_SCRIPT_PATH" /usr/local/bin/build_project
 
 # Check if the symlink was created successfully
 if [ $? -eq 0 ]; then
@@ -67,7 +63,7 @@ fi
 echo "Reloading ESP_CI_PROJECT_DIR environment variable for the current user..."
 
 # Ensure the entry in ~/.bashrc exists or update it if already there
-BASHRC="/home/$SUDO_USER/.bashrc"
+BASHRC="/home/$CURRENT_USER/.bashrc"
 if grep -q "^export ESP_CI_PROJECT_DIR=" "$BASHRC"; then
   echo "Updating ESP_CI_PROJECT_DIR in $BASHRC"
   sed -i "s|^export ESP_CI_PROJECT_DIR=.*|export ESP_CI_PROJECT_DIR=\"$ESP_CI_PROJECT_DIR\"|g" "$BASHRC"
@@ -98,14 +94,14 @@ if [[ "$configure_esp" == "yes" ]]; then
     # Add the ESP32 project path to ~/.bashrc if it doesn't already exist
     if grep -q "^export LOCAL_ESP_PROJECT_PATH=" "$BASHRC"; then
       echo "Updating LOCAL_ESP_PROJECT_PATH in $BASHRC"
-      sed -i "s|^export LOCAL_ESP_PROJECT_PATH=.*|export LOCAL_ESP_PROJECT_PATH=\"$LOCAL_ESP_PROJECT_PATH\"|g" "$BASHRC"
+      sudo sed -i "s|^export LOCAL_ESP_PROJECT_PATH=.*|export LOCAL_ESP_PROJECT_PATH=\"$LOCAL_ESP_PROJECT_PATH\"|g" "$BASHRC"
     else
       echo "Adding LOCAL_ESP_PROJECT_PATH to $BASHRC"
       echo "export LOCAL_ESP_PROJECT_PATH=\"$LOCAL_ESP_PROJECT_PATH\"" >> "$BASHRC"
     fi
 
     # Reload ~/.bashrc for the current user session
-    sudo -u "$SUDO_USER" bash -c "source $BASHRC"
+    sudo -u "$CURRENT_USER" bash -c "source $BASHRC"
 
     echo "ESP32 project path set successfully."
   else
@@ -113,6 +109,11 @@ if [[ "$configure_esp" == "yes" ]]; then
     exit 1
   fi
 fi
+
+# Add user to docker group
+sudo groupadd docker
+sudo usermod -a -G docker $CURRENT_USER
+newgrp docker
 
 echo "Installation completed. ESP_CI_PROJECT_DIR is set to $ESP_CI_PROJECT_DIR."
 echo "Please run 'source ~/.bashrc' or restart the terminal for changes to take effect."

@@ -172,7 +172,7 @@ fi
 
 # Stop and remove the Docker container
 echo "Stopping and removing the Docker container..."
-docker-compose -f "$DOCKER_COMPOSE_FILE" down 2>&1
+docker compose -f "$DOCKER_COMPOSE_FILE" down 2>&1
 
 # Return to the original directory
 echo "Returning to the original directory: $CURRENT_DIR"
