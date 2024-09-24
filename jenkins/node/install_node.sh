@@ -5,7 +5,6 @@ SSH_DIR="./ssh"
 AGENT_DIR="./agent"
 COMPOSE_FILE="docker-compose.yml"
 JENKINS_KEY="jenkins_node_secret"
-DOCKER_SERVICE="/etc/systemd/system/docker-compose-jenkins.service"
 
 # Checking if the .ssh folder exists
 if [ ! -d "$SSH_DIR" ]; then
@@ -31,6 +30,14 @@ if [[ $change_key == "y" || $change_key == "Y" ]]; then
   read -p "Enter the new Jenkins Node key: " new_jenkins_key
   JENKINS_KEY=$new_jenkins_key
   echo "The Jenkins Node key has been updated."
+fi
+
+# Replacing the key in the docker-compose.yml file
+if [ -f "$COMPOSE_FILE" ]; then
+  sed -i "s|<jenkins_encryption_key>|$JENKINS_KEY|g" "$COMPOSE_FILE"
+  echo "The $COMPOSE_FILE file has been updated with the new Jenkins Node key."
+else
+  echo "$COMPOSE_FILE file does not exist."
 fi
 
 # Checking if the SSH key exists

@@ -1,7 +1,12 @@
-./artifacts
-./.idea
-/build/tmp
-/build/artifacts/ssh
-/jenkins/node/agent
-/jenkins/node/ssh
-/jenkins/node/remoting
+# Ignoring temporary build files and artifacts
+/build/tmp/
+/artifacts/
+/build/artifacts/ssh/
+
+# Ignoring Jenkins agent, remoting, and SSH-related files
+/jenkins/node/agent/
+/jenkins/node/remoting/
+/jenkins/node/ssh/
+
+# Ignoring .idea folder (IDE-specific files)
+/.idea/
