@@ -28,7 +28,8 @@ RUN apt-get update && \
         gnupg \
         openssh-client \
         lsb-release \
-        bash
+        bash \
+        jq
 
 # ----------------------------------------
 # Konfiguracja repozytorium Docker
@@ -70,6 +71,11 @@ RUN apt-get update && \
         python3-cffi \
         pkg-config \
         docker-ce-cli
+
+# ----------------------------------------
+# Narzędzia do statycznej analizy kodu
+# ----------------------------------------
+RUN apt-get update && apt-get install -y cppcheck
 
 # ----------------------------------------
 # Ustawienie alternatywy dla Python
